@@ -1,7 +1,7 @@
 # Humanify Duration
 
 [<img alt="github" src="https://img.shields.io/badge/github-mrdesjardins/pretty_duration-8dagcb?labelColor=555555&logo=github" height="20">](https://github.com/MrDesjardins/pretty-duration)
-[<img alt="crates.io" src="https://img.shields.io/crates/v/pretty_duration.svg?color=fc8d62&logo=rust" height="20">](https://crates.io/crates/hilbert-curve-rust)
+[<img alt="crates.io" src="https://img.shields.io/crates/v/pretty_duration.svg?color=fc8d62&logo=rust" height="20">](https://crates.io/crates/pretty-duration)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.pretty_duration-66c2a5?labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/pretty-duration/latest/pretty-duration)
 [![CI Build](https://github.com/MrDesjardins/pretty-duration/actions/workflows/rust.yml/badge.svg)](https://github.com/MrDesjardins/pretty-duration/actions/workflows/rust.yml)
 [![codecov](https://codecov.io/gh/MrDesjardins/pretty-duration/branch/main/graph/badge.svg?token=TWHYC1X1KQ)](https://codecov.io/gh/MrDesjardins/pretty-duration)
