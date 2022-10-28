@@ -23,8 +23,8 @@ fn pretty_duration_compact_large_duration() {
         &Duration::from_millis(31556956789),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Compact),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "1y 11mon 109d 5h 49m 16s 789ms");
@@ -36,8 +36,8 @@ fn pretty_duration_compact_minutes_second_duration() {
         &Duration::from_millis(301000),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Compact),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "5m 1s");
@@ -49,8 +49,8 @@ fn pretty_duration_compact_hours_minutes_duration() {
         &Duration::from_millis(3661001),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Compact),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "1h 1m 1s 1ms");
@@ -62,8 +62,8 @@ fn pretty_duration_compact_zerovalue() {
         &Duration::from_millis(0),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Compact),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "0ms");
@@ -79,8 +79,8 @@ fn pretty_duration_expanded_large_duration() {
         &Duration::from_millis(31556956789),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Expanded),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(
@@ -95,8 +95,8 @@ fn pretty_duration_expanded_minutes_second_duration() {
         &Duration::from_millis(301000),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Expanded),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "5 minutes 1 second");
@@ -108,8 +108,8 @@ fn pretty_duration_expanded_hours_minutes_duration() {
         &Duration::from_millis(3661001),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Expanded),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "1 hour 1 minute 1 second 1 millisecond");
@@ -121,8 +121,8 @@ fn pretty_duration_expanded_zerovalue() {
         &Duration::from_millis(0),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Expanded),
-            compact_labels: None,
-            expanded_labels: None,
+            singular_labels: None,
+            plural_labels: None,
         }),
     );
     assert_eq!(result, "0 millisecond");
@@ -137,21 +137,28 @@ fn pretty_duration_expanded_custom_words() {
         &Duration::from_millis(31556956789),
         Some(PrettyDurationOptions {
             output_format: Some(PrettyDurationOutputFormat::Expanded),
-            compact_labels: None,
-            expanded_labels: Some(PrettyDurationLabels {
+            singular_labels: Some(PrettyDurationLabels {
                 year: "année",
-                month: "mois",
+                month: "mois", // Not the `s` here in singular form
                 day: "jour",
                 hour: "heure",
                 minute: "minute",
                 second: "seconde",
                 millisecond: "milliseconde",
             }),
+            plural_labels: Some(PrettyDurationLabels {
+                year: "années",
+                month: "mois",
+                day: "jours",
+                hour: "heures",
+                minute: "minutes",
+                second: "secondes",
+                millisecond: "millisecondes",
+            }),
         }),
     );
     assert_eq!(
         result,
-        "1 année 11 moiss 109 jours 5 heures 49 minutes 16 secondes 789 millisecondes"
+        "1 année 11 mois 109 jours 5 heures 49 minutes 16 secondes 789 millisecondes"
     );
-    // ⚠️⚠️ That is NOT good (moiss), but will take care for particular rules later
 }
