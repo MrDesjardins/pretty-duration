@@ -6,7 +6,7 @@ authors = ["Patrick Desjardins <mrdesjardins@gmail.com>"]
 homepage = "https://github.com/MrDesjardins/pretty-duration"
 repository = "https://github.com/MrDesjardins/pretty-duration"
 license = "Apache-2.0"
-keywords = ["pretty duration", "humanify duration", "easy ready duration"]
+keywords = ["pretty-duration", "humanify-duration", "easy-ready-duration", "format-duration", "format-number"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
