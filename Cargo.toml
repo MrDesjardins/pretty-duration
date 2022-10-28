@@ -1,5 +1,6 @@
 [package]
 name = "pretty-duration"
+description = "Rust library that takes a duration and returns a string that is prettier to read for a human. The format of the duration can be customized in a short and long format and can be localized."
 version = "0.1.0"
 edition = "2021"
 authors = ["Patrick Desjardins <mrdesjardins@gmail.com>"]
