@@ -1,4 +1,4 @@
-name: Rust Build, Test and Coverage
+name: CI Build
 
 on:
   push:
