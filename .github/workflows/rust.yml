@@ -23,11 +23,11 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
+      - name: Install toolchains
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
+          toolchain: ${{ matrix.rust }}
           override: true
 
       - uses: Swatinem/rust-cache@v1
@@ -50,7 +50,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Install stable toolchain
+      - name: Install toolchains
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.rust }}
@@ -81,3 +81,22 @@ jobs:
           files: coverage/*.lcov
           verbose: true
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+      
+#      - name: Run benchmark
+#        run: cargo +nightly bench | tee output.txt
+#        
+#      - name: Store benchmark result
+#        uses: benchmark-action/github-action-benchmark@v1
+#        with:
+#          tool: 'cargo'
+#          output-file-path: output.txt
+#          # Access token to deploy GitHub Pages branch
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          # Push and deploy GitHub pages branch automatically
+#          auto-push: true
+#          # Show alert with commit comment on detecting possible performance regression
+#          alert-threshold: '200%'
+#          # Enable alert commit comment
+#          comment-on-alert: true
+#          # Mention me in the commit comment
+#          alert-comment-cc-users: "@mrdesjardins"

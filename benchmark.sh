@@ -1,0 +1,1 @@
+cargo bench --bench benchmark -- --verbose --plotting-backend plotters

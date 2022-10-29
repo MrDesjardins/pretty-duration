@@ -18,13 +18,86 @@ cargo add pretty-duration
 
 ## How to use?
 
-```sh
+### Without Configuration Option
+
+```rust
 use pretty_duration::pretty_duration;
 use std::time::Duration;
-let result = pretty_duration(&Duration::from_millis(1), None);
+let result = pretty_duration(&Duration::from_millis(31556956789), None);
+// result: 1 year 11 months 109 days 5 hours 49 minutes 16 seconds 789 milliseconds
 ```
 
+### With Configuration Option - Language
+
+```rust
+use pretty_duration::pretty_duration;
+use std::time::Duration;
+let result = pretty_duration(
+    &Duration::from_millis(31556956789),
+    Some(PrettyDurationOptions {
+        output_format: Some(PrettyDurationOutputFormat::Expanded),
+        singular_labels: Some(PrettyDurationLabels {
+            year: "année",
+            month: "mois", // Not the `s` here in singular form
+            day: "jour",
+            hour: "heure",
+            minute: "minute",
+            second: "seconde",
+            millisecond: "milliseconde",
+        }),
+        plural_labels: Some(PrettyDurationLabels {
+            year: "années",
+            month: "mois",
+            day: "jours",
+            hour: "heures",
+            minute: "minutes",
+            second: "secondes",
+            millisecond: "millisecondes",
+        }),
+    }),
+);
+// result: "1 année 11 mois 109 jours 5 heures 49 minutes 16 secondes 789 millisecondes
+```
+
+### With Configuration Option - Compact
+```rust
+let result = pretty_duration(
+    &Duration::from_millis(31556956789),
+    Some(PrettyDurationOptions {
+        output_format: Some(PrettyDurationOutputFormat::Compact),
+        singular_labels: None,
+        plural_labels: None,
+    }),
+);
+//  result: "1y 11mon 109d 5h 49m 16s 789ms");
+```
 # As a Developer of the Library
+
+## What to Install?
+
+You need to install the right toolchain:
+
+```sh
+rustup toolchain install stable
+rustup default stable
+```
+
+To perform test coverage you need to install
+
+```sh
+cargo install grcov
+rustup component add llvm-tools-preview
+```
+
+To generate benchmark plots you need to install GnuPlot
+
+```sh
+sudo apt update
+sudo apt install gnuplot
+
+# To confirm that it is properly installed:
+which gnuplot
+```
 
 ## Tests
 
@@ -44,11 +117,7 @@ rustup component add llvm-tools-preview
 Then, you can run:
 
 ```sh
-export RUSTFLAGS="-Cinstrument-coverage"
-cargo build
-export LLVM_PROFILE_FILE="profile-%p-%m.profraw"
-cargo test
-grcov . -s . --binary-path ./target/debug/ -t html --branch --ignore-not-existing -o ./target/debug/coverage/
+./coverage.sh
 ```
 
 Further explanation in the [Mozilla grcov website](https://github.com/mozilla/grcov)
@@ -57,6 +126,12 @@ Further explanation in the [Mozilla grcov website](https://github.com/mozilla/gr
 
 ```sh
 cargo doc --open
+```
+
+# Benchmark
+
+```sh
+cargo bench
 ```
 
 ## Publishing
