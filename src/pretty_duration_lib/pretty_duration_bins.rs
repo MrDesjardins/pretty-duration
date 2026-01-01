@@ -6,5 +6,7 @@ pub struct DurationBins {
     pub hours: u8,
     pub minutes: u8,
     pub seconds: u8,
-    pub milliseconds:u16,
+    pub milliseconds: u16,
+    pub microseconds: u16,
+    pub nanoseconds: u16,
 }
