@@ -15,6 +15,8 @@ pub struct PrettyDurationLabels {
     pub minute: &'static str,
     pub second: &'static str,
     pub millisecond: &'static str,
+    pub microsecond: &'static str,
+    pub nanosecond: &'static str,
 }
 /// Options to customize the output [String]
 #[derive(Clone)]

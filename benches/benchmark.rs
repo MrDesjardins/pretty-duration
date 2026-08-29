@@ -25,6 +25,8 @@ fn all_benchmarks(c: &mut Criterion) {
                         minute: "minute",
                         second: "seconde",
                         millisecond: "milliseconde",
+                        microsecond: "microseconde",
+                        nanosecond: "nanoseconde",
                     }),
                     plural_labels: Some(PrettyDurationLabels {
                         year: "années",
@@ -34,6 +36,8 @@ fn all_benchmarks(c: &mut Criterion) {
                         minute: "minutes",
                         second: "secondes",
                         millisecond: "millisecondes",
+                        microsecond: "microsecondes",
+                        nanosecond: "nanosecondes",
                     }),
                 })),
             )

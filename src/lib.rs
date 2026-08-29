@@ -26,6 +26,8 @@ const COMPACT_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
     minute: "m",
     second: "s",
     millisecond: "ms",
+    microsecond: "μs",
+    nanosecond: "ns",
 };
 const EXPANDED_SINGULAR_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
     year: "year",
@@ -35,6 +37,8 @@ const EXPANDED_SINGULAR_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
     minute: "minute",
     second: "second",
     millisecond: "millisecond",
+    microsecond: "microsecond",
+    nanosecond: "nanosecond",
 };
 const EXPANDED_PLURAL_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
     year: "years",
@@ -44,6 +48,8 @@ const EXPANDED_PLURAL_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
     minute: "minutes",
     second: "seconds",
     millisecond: "milliseconds",
+    microsecond: "microseconds",
+    nanosecond: "nanoseconds",
 };
 
 /// Main function of the pretty-duration library that takes a required [std::time::Duration] and
@@ -64,7 +70,7 @@ const EXPANDED_PLURAL_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
 /// ```rust
 /// use std::time::Duration;
 /// use pretty_duration::pretty_duration;
-///    
+///
 /// let result = pretty_duration(&Duration::from_millis(1), None);
 /// assert_eq!(result, "1ms");
 /// ```
@@ -90,8 +96,8 @@ const EXPANDED_PLURAL_DEFAULT: PrettyDurationLabels = PrettyDurationLabels {
 /// ```
 pub fn pretty_duration(duration: &Duration, options: Option<PrettyDurationOptions>) -> String {
     let options_with_default = set_default_options(options);
-    let ms = duration.as_millis();
-    let duration_by_bin = extract_bins(&ms);
+    let ns = duration.as_nanos();
+    let duration_by_bin = extract_bins_from_nanos(&ns);
 
     let mut result: Vec<String> = Vec::new();
     let is_full_word = matches!(
@@ -168,6 +174,26 @@ pub fn pretty_duration(duration: &Duration, options: Option<PrettyDurationOption
         ),
         is_full_word,
     );
+    try_adding(
+        &mut result,
+        duration_by_bin.microseconds.to_string(),
+        &get_unit(
+            options_with_default.singular_labels.microsecond,
+            options_with_default.plural_labels.microsecond,
+            duration_by_bin.microseconds > 1,
+        ),
+        is_full_word,
+    );
+    try_adding(
+        &mut result,
+        duration_by_bin.nanoseconds.to_string(),
+        &get_unit(
+            options_with_default.singular_labels.nanosecond,
+            options_with_default.plural_labels.nanosecond,
+            duration_by_bin.nanoseconds > 1,
+        ),
+        is_full_word,
+    );
 
     if result.len() == 0 {
         let separator = match is_full_word {
@@ -176,7 +202,7 @@ pub fn pretty_duration(duration: &Duration, options: Option<PrettyDurationOption
         };
         return format!(
             "{}{}{}",
-            "0", separator, options_with_default.singular_labels.millisecond
+            "0", separator, options_with_default.singular_labels.nanosecond
         );
     }
     return result.join(" ");
@@ -236,16 +262,18 @@ fn set_default_options(
     return default_options;
 }
 
-/// Convert a millisecond number into bins of time
-fn extract_bins(ms: &u128) -> DurationBins {
+/// Convert a nanosecond number into bins of time
+fn extract_bins_from_nanos(ns: &u128) -> DurationBins {
     return DurationBins {
-        years: (ms / 31556926000) as u16,
-        months: (ms / 2629800000) as u8,
-        days: (ms / 86400000) as u8,
-        hours: ((ms / 3600000) % 24) as u8,
-        minutes: ((ms / 60000) % 60) as u8,
-        seconds: ((ms / 1000) % 60) as u8,
-        milliseconds: ((ms) % 1000) as u16,
+        years: (ns / 31_556_926_000_000_000) as u16,
+        months: (ns / 2_629_800_000_000_000) as u8,
+        days: (ns / 86_400_000_000_000) as u8,
+        hours: ((ns / 3_600_000_000_000) % 24) as u8,
+        minutes: ((ns / 60_000_000_000) % 60) as u8,
+        seconds: ((ns / 1_000_000_000) % 60) as u8,
+        milliseconds: ((ns / 1_000_000) % 1000) as u16,
+        microseconds: ((ns / 1_000) % 1000) as u16,
+        nanoseconds: (ns % 1000) as u16,
     };
 }
 
@@ -268,6 +296,11 @@ mod test_get_unit {
 #[cfg(test)]
 mod test_extract_bins {
     use super::*;
+
+    fn extract_bins(ms: &u128) -> DurationBins {
+        let ns = ms * 1_000_000;
+        return extract_bins_from_nanos(&ns);
+    }
 
     #[test]
     fn test_extract_bins_huge() {
